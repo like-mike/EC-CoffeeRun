@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/michaelreese/Desktop/Coffee Run/core/build/libs/core-1.0.jar"
+        jumboMode="false"
+        revision="25.0.2"
+        sha1="5a217a445150a77adcdb9bb042a71e80392c3ad3">
+        <dex dex="/Users/michaelreese/Desktop/Coffee Run/android/build/intermediates/pre-dexed/debug/core-1.0_e6eea4102482e3610204932ac97a3975db7ae69e.jar" />
+    </item>
+
+</items>

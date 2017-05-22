@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/michaelreese/Desktop/Coffee Run/android/build/intermediates/res/merged/debug/mipmap-xxhdpi-v4/ic_launcher2.png",
+        "source": "/Users/michaelreese/Desktop/Coffee Run/android/res/mipmap-xxhdpi/ic_launcher2.png"
+    },
+    {
+        "merged": "/Users/michaelreese/Desktop/Coffee Run/android/build/intermediates/res/merged/debug/mipmap-xxhdpi-v4/ic_coffee.png",
+        "source": "/Users/michaelreese/Desktop/Coffee Run/android/res/mipmap-xxhdpi/ic_coffee.png"
+    }
+]
