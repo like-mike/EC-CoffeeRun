@@ -6,5 +6,13 @@
     {
         "merged": "/Users/michaelreese/Desktop/Coffee Run/android/build/intermediates/res/merged/debug/mipmap-mdpi-v4/ic_coffee.png",
         "source": "/Users/michaelreese/Desktop/Coffee Run/android/res/mipmap-mdpi/ic_coffee.png"
+    },
+    {
+        "merged": "/Users/michaelreese/Documents/EC_CoffeeRun/EC-CoffeeRun/android/build/intermediates/res/merged/debug/mipmap-mdpi-v4/ic_coffee.png",
+        "source": "/Users/michaelreese/Documents/EC_CoffeeRun/EC-CoffeeRun/android/res/mipmap-mdpi/ic_coffee.png"
+    },
+    {
+        "merged": "/Users/michaelreese/Documents/EC_CoffeeRun/EC-CoffeeRun/android/build/intermediates/res/merged/debug/mipmap-mdpi-v4/ic_launcher2.png",
+        "source": "/Users/michaelreese/Documents/EC_CoffeeRun/EC-CoffeeRun/android/res/mipmap-mdpi/ic_launcher2.png"
     }
 ]

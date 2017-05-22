@@ -1,5 +1,9 @@
 [
     {
+        "merged": "/Users/michaelreese/Documents/EC_CoffeeRun/EC-CoffeeRun/android/build/intermediates/res/merged/debug/drawable-mdpi-v4/ic_launcher.png",
+        "source": "/Users/michaelreese/Documents/EC_CoffeeRun/EC-CoffeeRun/android/res/drawable-mdpi/ic_launcher.png"
+    },
+    {
         "merged": "/Users/michaelreese/Desktop/Coffee Run/android/build/intermediates/res/merged/debug/drawable-mdpi-v4/ic_launcher.png",
         "source": "/Users/michaelreese/Desktop/Coffee Run/android/res/drawable-mdpi/ic_launcher.png"
     }

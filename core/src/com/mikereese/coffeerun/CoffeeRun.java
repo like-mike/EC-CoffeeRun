@@ -3,6 +3,8 @@ package com.mikereese.coffeerun;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,7 +21,9 @@ public class CoffeeRun extends ApplicationAdapter {
 
 
 
-
+	Sound bounce;
+	Sound spill;
+	boolean playSound = false;
 	SpriteBatch batch;
 	Texture img;
 	int gameOverScreen =0;
@@ -31,6 +35,7 @@ public class CoffeeRun extends ApplicationAdapter {
 	Texture highScoreImg;
 	boolean playing;
 	Texture cups[];
+	Music music;
 	int flapState = 0;
 	float cupY = 0;
 	float velocity = 0;
@@ -65,6 +70,14 @@ public class CoffeeRun extends ApplicationAdapter {
 	@Override
 	public void create () {
 		cupRect = new Circle();
+		music = Gdx.audio.newMusic(Gdx.files.internal("hello.mp3"));
+		music.setLooping(true);
+		music.setVolume(0.1f);
+		music.play();
+
+		bounce = Gdx.audio.newSound(Gdx.files.internal("bounce.ogg"));
+		spill = Gdx.audio.newSound(Gdx.files.internal("splash.mp3"));
+
 		//shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
@@ -103,6 +116,7 @@ public class CoffeeRun extends ApplicationAdapter {
 	}
 
 	public void initializeGame(){
+
 		maxTubeOffset = Gdx.graphics.getHeight()/2 - gap /2 -100;
 		randomGenerator = new Random();
 		distanceBetweenTubes = Gdx.graphics.getWidth() * 3 / 4;
@@ -173,6 +187,7 @@ public class CoffeeRun extends ApplicationAdapter {
 
 			if(Gdx.input.justTouched()){
 				velocity = -30;
+				bounce.play(0.5f);
 
 
 
@@ -237,6 +252,8 @@ public class CoffeeRun extends ApplicationAdapter {
 
 		//shapeRenderer.circle(cupRect.x,cupRect.y,cupRect.radius );
 
+		//if(playSound)
+			//spill.play();
 		for(int i =0;i<4;i++){
 			//shapeRenderer.rect(tubeX[i]+50,Gdx.graphics.getHeight()/2 + gap /2-500+tubeOffset[i]+100,topTube.getWidth()-100,topTube.getHeight());
 			//shapeRenderer.rect(tubeX[i]+50,Gdx.graphics.getHeight()/2-gap/2-bottomTube.getWidth()-100+tubeOffset[i]-100,topTube.getWidth()-100,topTube.getHeight());
@@ -247,9 +264,12 @@ public class CoffeeRun extends ApplicationAdapter {
 			if(Intersector.overlaps(cupRect,topTubeRectangles[i]) || Intersector.overlaps(cupRect,bottomTubeRectangles[i])){
 				playing = false;
 				gameOverScreen=1;
+				playSound = true;
+
+				cupY = 0;
 
 				if (gameOverScreen == 1) {
-					cupY = 0;
+
 
 					batch.draw(gameOver,50,1200,gameOver.getWidth()*3,gameOver.getHeight()*3);
 

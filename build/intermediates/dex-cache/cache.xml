@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/michaelreese/Desktop/Coffee Run/core/build/libs/core-1.0.jar"
+        jar="/Users/michaelreese/Documents/EC_CoffeeRun/EC-CoffeeRun/core/build/libs/core-1.0.jar"
         jumboMode="false"
         revision="25.0.2"
-        sha1="5a217a445150a77adcdb9bb042a71e80392c3ad3">
-        <dex dex="/Users/michaelreese/Desktop/Coffee Run/android/build/intermediates/pre-dexed/debug/core-1.0_e6eea4102482e3610204932ac97a3975db7ae69e.jar" />
+        sha1="415f3c9d61ad6feb85d44d80e77823f45b4053b6">
+        <dex dex="/Users/michaelreese/Documents/EC_CoffeeRun/EC-CoffeeRun/android/build/intermediates/pre-dexed/debug/core-1.0_0a975624adac77079907b9b02610c25d720beb71.jar" />
     </item>
 
 </items>
