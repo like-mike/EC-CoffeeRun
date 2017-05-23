@@ -6,21 +6,30 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
 
 public class CoffeeRun extends ApplicationAdapter {
+	ImageButton button;
 
 
-
-
+	private OrthographicCamera gameCam;
+	private Viewport gamePort;
 	Sound bounce;
 	Sound spill;
 	boolean playSound = false;
@@ -46,7 +55,7 @@ public class CoffeeRun extends ApplicationAdapter {
 	int score = 0;
 	Texture topTube;
 	Texture bottomTube;
-	float gap = 1450;
+	float gap = 1500;
 	int scoringTube = 0;
 
 	float maxTubeOffset;
@@ -66,14 +75,25 @@ public class CoffeeRun extends ApplicationAdapter {
 	float[] tubeX = new float[numberOfNeedles];
 	float[] tubeOffset = new float[numberOfNeedles];
 	float distanceBetweenTubes;
-	
+
+	@Override
+	public void resize(int width, int height) {
+		gamePort.update(width,height,true);
+	}
+
 	@Override
 	public void create () {
+		Texture mute = new Texture("coffee.gif");
+		Drawable muteB = new TextureRegionDrawable(new TextureRegion());
+		button = new ImageButton(muteB);
+
+		gameCam = new OrthographicCamera();
+		gamePort = new StretchViewport(1080,1776,gameCam);
 		cupRect = new Circle();
 		music = Gdx.audio.newMusic(Gdx.files.internal("hello.mp3"));
 		music.setLooping(true);
 		music.setVolume(0.1f);
-		music.play();
+		//music.play();
 
 		bounce = Gdx.audio.newSound(Gdx.files.internal("bounce.ogg"));
 		spill = Gdx.audio.newSound(Gdx.files.internal("splash.mp3"));
@@ -100,7 +120,7 @@ public class CoffeeRun extends ApplicationAdapter {
 
 
 
-		cupY = Gdx.graphics.getHeight()/2 - cups[flapState].getHeight()/2;
+		cupY = gamePort.getWorldHeight()/2 - cups[flapState].getHeight()/2;
 
 		topTube = new Texture("needleTop.png");
 		bottomTube = new Texture("needleBottom.png");
@@ -117,13 +137,14 @@ public class CoffeeRun extends ApplicationAdapter {
 
 	public void initializeGame(){
 
-		maxTubeOffset = Gdx.graphics.getHeight()/2 - gap /2 -100;
+		maxTubeOffset = gamePort.getWorldHeight()/2 - gap /2 -100;
 		randomGenerator = new Random();
-		distanceBetweenTubes = Gdx.graphics.getWidth() * 3 / 4;
-		//tubeX = Gdx.graphics.getWidth()/2-topTube.getWidth()/2;
+		distanceBetweenTubes = gamePort.getWorldWidth() * 3 / 4;
+
+		//tubeX = gamePort.getWorldWidth()/2-topTube.getWidth()/2;
 		for(int i = 0; i< numberOfNeedles; i++){
-			tubeOffset[i] = (randomGenerator.nextFloat() - .5f) * (Gdx.graphics.getHeight() - gap - 700);
-			tubeX[i] = Gdx.graphics.getWidth()/2-topTube.getWidth()/2 + Gdx.graphics.getWidth() + i * distanceBetweenTubes;//adds tubes half a screen a way++
+			tubeOffset[i] = (randomGenerator.nextFloat() - .5f) * (gamePort.getWorldHeight() - gap - 700);
+			tubeX[i] = gamePort.getWorldWidth()/2-topTube.getWidth()/2 + gamePort.getWorldWidth() + i * distanceBetweenTubes;//adds tubes half a screen a way++
 
 			topTubeRectangles[i] = new Rectangle();
 			bottomTubeRectangles[i] = new Rectangle();
@@ -132,9 +153,10 @@ public class CoffeeRun extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-
+		batch.setProjectionMatrix(gameCam.combined);
+		
 		batch.begin();
-		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(background, 0, 0, gamePort.getWorldWidth(), gamePort.getWorldHeight());
 
 		if(gameState == 0){
 			batch.draw(logo1,50,1200,logo1.getWidth()*2,logo1.getHeight()*2);
@@ -151,7 +173,7 @@ public class CoffeeRun extends ApplicationAdapter {
 		if(gameState != 0 && playing) {
 
 
-			if(tubeX[scoringTube] < Gdx.graphics.getWidth()/2){
+			if(tubeX[scoringTube] < gamePort.getWorldWidth()/2){
 				score++;
 				Gdx.app.log("Score",String.valueOf(score));
 				if(scoringTube< numberOfNeedles -1)
@@ -164,7 +186,7 @@ public class CoffeeRun extends ApplicationAdapter {
 
 				if(tubeX[i]<-topTube.getWidth()){
 					tubeX[i] += numberOfNeedles *distanceBetweenTubes;
-					tubeOffset[i] = (randomGenerator.nextFloat() - .5f) * (Gdx.graphics.getHeight() - gap - 700);
+					tubeOffset[i] = (randomGenerator.nextFloat() - .5f) * (gamePort.getWorldHeight() - gap - 700);
 				}
 				else {
 					tubeX[i] = tubeX[i] - 4;
@@ -173,12 +195,13 @@ public class CoffeeRun extends ApplicationAdapter {
 
 				}
 
-				batch.draw(topTube,tubeX[i],Gdx.graphics.getHeight()/2 + gap /2-500+tubeOffset[i]);
-				batch.draw(bottomTube,tubeX[i],Gdx.graphics.getHeight()/2-gap/2-bottomTube.getWidth()-100+tubeOffset[i]);
+				batch.draw(topTube,tubeX[i],gamePort.getWorldHeight()/2 + gap /2-500+tubeOffset[i]);
+				batch.draw(bottomTube,tubeX[i],gamePort.getWorldHeight()/2-gap/2-bottomTube.getWidth()-100+tubeOffset[i]);
 
-				topTubeRectangles[i] = new Rectangle(tubeX[i]+50,Gdx.graphics.getHeight()/2 + gap /2-500+tubeOffset[i]+100,topTube.getWidth()-100,topTube.getHeight());
-				bottomTubeRectangles[i] = new Rectangle(tubeX[i]+50,Gdx.graphics.getHeight()/2-gap/2-bottomTube.getWidth()-100+tubeOffset[i]-100,topTube.getWidth()-100,topTube.getHeight());
+				topTubeRectangles[i] = new Rectangle(tubeX[i]+50,gamePort.getWorldHeight()/2 + gap /2-500+tubeOffset[i]+100,topTube.getWidth()-100,topTube.getHeight());
+				bottomTubeRectangles[i] = new Rectangle(tubeX[i]+50,gamePort.getWorldHeight()/2-gap/2-bottomTube.getWidth()-100+tubeOffset[i]-100,topTube.getWidth()-100,topTube.getHeight());
 			}
+
 
 
 
@@ -239,10 +262,10 @@ public class CoffeeRun extends ApplicationAdapter {
 
 
 
-		batch.draw(cups[flapState], Gdx.graphics.getWidth() / 2 - cups[flapState].getWidth() / 2 + 100, cupY, 300, 300);//place sprite at center of screen
+		batch.draw(cups[flapState], gamePort.getWorldWidth() / 2 - cups[flapState].getWidth() / 2 + 100, cupY, 300, 300);//place sprite at center of screen
 
 
-		cupRect.set(Gdx.graphics.getWidth()/2-13, cupY +cups[0].getHeight()/2-95,cups[0].getWidth()/2-175);
+		cupRect.set(gamePort.getWorldWidth()/2-13, cupY +cups[0].getHeight()/2-95,cups[0].getWidth()/2-175);
 
 		font.draw(batch,String.valueOf(score),100,200);
 
@@ -255,11 +278,11 @@ public class CoffeeRun extends ApplicationAdapter {
 		//if(playSound)
 			//spill.play();
 		for(int i =0;i<4;i++){
-			//shapeRenderer.rect(tubeX[i]+50,Gdx.graphics.getHeight()/2 + gap /2-500+tubeOffset[i]+100,topTube.getWidth()-100,topTube.getHeight());
-			//shapeRenderer.rect(tubeX[i]+50,Gdx.graphics.getHeight()/2-gap/2-bottomTube.getWidth()-100+tubeOffset[i]-100,topTube.getWidth()-100,topTube.getHeight());
+			//shapeRenderer.rect(tubeX[i]+50,gamePort.getWorldHeight()/2 + gap /2-500+tubeOffset[i]+100,topTube.getWidth()-100,topTube.getHeight());
+			//shapeRenderer.rect(tubeX[i]+50,gamePort.getWorldHeight()/2-gap/2-bottomTube.getWidth()-100+tubeOffset[i]-100,topTube.getWidth()-100,topTube.getHeight());
 
-			//topTubeRectangles[i] = new Rectangle(tubeX[i],Gdx.graphics.getHeight()/2 + gap /2-500+tubeOffset[i],topTube.getWidth(),topTube.getHeight());
-			//bottomTubeRectangles[i] = new Rectangle(tubeX[i],Gdx.graphics.getHeight()/2-gap/2-bottomTube.getWidth()-100+tubeOffset[i],topTube.getWidth(),topTube.getHeight());
+			//topTubeRectangles[i] = new Rectangle(tubeX[i],gamePort.getWorldHeight()/2 + gap /2-500+tubeOffset[i],topTube.getWidth(),topTube.getHeight());
+			//bottomTubeRectangles[i] = new Rectangle(tubeX[i],gamePort.getWorldHeight()/2-gap/2-bottomTube.getWidth()-100+tubeOffset[i],topTube.getWidth(),topTube.getHeight());
 
 			if(Intersector.overlaps(cupRect,topTubeRectangles[i]) || Intersector.overlaps(cupRect,bottomTubeRectangles[i])){
 				playing = false;
